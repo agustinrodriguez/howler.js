@@ -304,9 +304,10 @@
      * Play a sound from the current time (0 by default).
      * @param  {String}   sprite   (optional) Plays from the specified position in the sound sprite definition.
      * @param  {Function} callback (optional) Returns the unique playback id for this sound instance.
+     * @param  {Object} options (optional) Custom options for the current play action.
      * @return {Howl}
      */
-    play: function(sprite, callback) {
+    play: function(sprite, callback, options) {
       var self = this;
 
       // if no sprite was passed but a callback was, update the variables
@@ -369,6 +370,11 @@
             // end the track if it is HTML audio and a sprite
             if (!self._webAudio && !loop) {
               self.stop(data.id, data.timer);
+            }
+
+            // fire custom 'onend' only for this 'play'
+            if (options && options.onend) {
+                options.onend();
             }
 
             // fire ended event
